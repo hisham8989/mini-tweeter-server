@@ -1,0 +1,24 @@
+const jwt = require("jsonwebtoken");
+const env = require("../config/environment");
+
+module.exports.verifyToken = (req, res, next) => {
+  try {
+    let token = req.header("Authorization");
+
+    if (!token) return res.status(403).send("Access Denied");
+    if (token.startsWith("Bearer ")) {
+      token = token.slice(7, token.length).trimLeft();
+    } else {
+      return res.status(403).send("Incorrect token");
+    }
+
+    const verified = jwt.verify(token, env.jwt_secret);
+    req.user = {
+      email: verified.email,
+      password: verified.password,
+    };
+    next();
+  } catch (err) {
+    return res.status(500).json({ status: false, error: err });
+  }
+};
