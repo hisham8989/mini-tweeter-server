@@ -1,24 +1,37 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: true,
     },
-    followers: {
-      type: Array,
-      default: [],
-    },
-    location: String,
-    occupation: String,
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
+
+userSchema.index({ username: 1 });
 
 const User = mongoose.model("User", userSchema);
 
