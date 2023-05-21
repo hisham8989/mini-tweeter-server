@@ -9,29 +9,29 @@ const controller = new TweetController();
 
 router.get(
   "/",
-  authMiddleware.verifyToken,
   validate(tweetValidation.getTweet),
+  authMiddleware.verifyToken,
   controller.getAllTweets
 );
 
 router.get(
-  "/:userId/followers",
+  "/:userId/following",
+  validate(tweetValidation.getFollowingsTweets),
   authMiddleware.verifyToken,
-  validate(tweetValidation.getFollowerTweets),
-  controller.getFollowerTweets
+  controller.getFollowingsTweets
 );
 
 router.post(
   "/create/:userId",
-  authMiddleware.verifyToken,
   validate(tweetValidation.createTweet),
+  authMiddleware.verifyToken,
   controller.createTweet
 );
 
 router.post(
   "/update/:userId",
-  authMiddleware.verifyToken,
   validate(tweetValidation.updateTweet),
+  authMiddleware.verifyToken,
   controller.updateTweet
 );
 

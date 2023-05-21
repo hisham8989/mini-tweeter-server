@@ -4,7 +4,6 @@ const tweetDao = new TweetDao();
 class TweetController {
   getAllTweets = async (req, res) => {
     try {
-      const { id: userId } = req.user;
       const tweets = await tweetDao.readTweets();
       return res.status(200).json({
         success: true,
@@ -54,10 +53,10 @@ class TweetController {
     }
   };
 
-  getFollowerTweets = async (req, res) => {
+  getFollowingsTweets = async (req, res) => {
     try {
       const { userId } = req.params;
-      const tweets = await tweetDao.readFollowerTweets(userId);
+      const tweets = await tweetDao.readFollowingsTweets(userId);
       return res.status(200).json({
         success: true,
         data: tweets,

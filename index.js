@@ -1,16 +1,22 @@
 const express = require("express");
 const env = require("./config/environment");
+const cors = require("cors");
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
+const morgan = require("morgan");
 const { connectDB } = require("./config/db");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = env.port;
 const { ValidationError } = require("express-validation");
 
 /** CONFIGURATION */
-
+app.use(express.json());
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+if ((env.name = "development")) app.use(morgan("tiny"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-
+app.use(cors());
 /** ROUTES */
 app.use("/", require("./routes/app.routes"));
 

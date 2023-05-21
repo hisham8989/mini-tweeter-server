@@ -35,8 +35,8 @@ class UserDao {
           userId,
           { $addToSet: { following: userToFollowId } },
           { new: true }
-        );
-        resolve(user);
+        ).select("-password");
+        resolve(user.following[user.following.length - 1]);
       } catch (err) {
         reject(err);
       }
@@ -50,9 +50,9 @@ class UserDao {
           userId,
           { $pull: { following: userToUnfollowId } },
           { new: true }
-        );
+        ).select("-password");
 
-        resolve(user);
+        resolve(userToUnfollowId);
       } catch (err) {
         reject(err);
       }
@@ -83,6 +83,18 @@ class UserDao {
           { new: true }
         );
 
+        resolve(user);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  getUserById(userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await User.findById({ _id: userId }).select("-password");
+        if (!user) throw "username does not exist";
         resolve(user);
       } catch (err) {
         reject(err);

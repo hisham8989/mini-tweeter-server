@@ -7,7 +7,7 @@ module.exports.getTweet = {
   }),
 };
 
-module.exports.getFollowerTweets = {
+module.exports.getFollowingsTweets = {
   params: Joi.object({
     userId: Joi.string().regex(OBJECTID_REGEX).optional(),
   }),

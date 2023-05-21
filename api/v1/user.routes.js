@@ -10,22 +10,28 @@ const router = express.Router();
 const controller = new UserController();
 const followController = new FollowController();
 
+router.get(
+  "/:id",
+  validate(authValidation.fetchUserById, {}, {}),
+  authMiddleware.verifyToken,
+  controller.fetchUserById
+);
+
 router.post(
   "/create",
   validate(authValidation.register, {}, {}),
-  authMiddleware.verifyToken,
   controller.createUser
 );
 
 router.post(
-  "/follow/:toFollowId",
+  "/follow/:toFollowId/user/:userId",
   validate(followValidation.follow, {}, {}),
   authMiddleware.verifyToken,
   followController.followUser
 );
 
 router.post(
-  "/unfollow/:toUnFollowId",
+  "/unfollow/:toUnFollowId/user/:userId",
   validate(followValidation.unfollow, {}, {}),
   authMiddleware.verifyToken,
   followController.unFollowUser

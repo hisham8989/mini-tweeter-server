@@ -4,14 +4,14 @@ const userDao = new UserDao();
 class FollowController {
   followUser = async (req, res) => {
     try {
-      const { toFollowId } = req.params;
-      const { id: userId } = req.user;
+      const { toFollowId, userId } = req.params;
+      // const { id: userId } = req.user;
       if (userId === toFollowId) throw "user can not follow himself";
-      await userDao.followUser(userId, toFollowId);
+      const followedUser = await userDao.followUser(userId, toFollowId);
       await userDao.addFollower(toFollowId, userId);
       return res
         .status(201)
-        .json({ success: true, message: "start following" });
+        .json({ success: true, message: "start following", followedUser });
     } catch (err) {
       return res
         .status(500)
@@ -21,14 +21,14 @@ class FollowController {
 
   unFollowUser = async (req, res) => {
     try {
-      const { toUnFollowId } = req.params;
-      const { id: userId } = req.user;
+      const { toUnFollowId, userId } = req.params;
+      // const { id: userId } = req.user;
       if (userId === toUnFollowId) throw "user can not unfollow himself";
-      await userDao.unfollowUser(userId, toUnFollowId);
+      const unfollowedUser = await userDao.unfollowUser(userId, toUnFollowId);
       await userDao.removeFollower(toUnFollowId, userId);
       return res
         .status(201)
-        .json({ success: true, message: "remove following" });
+        .json({ success: true, message: "remove following", unfollowedUser });
     } catch (err) {
       return res
         .status(500)

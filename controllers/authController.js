@@ -9,21 +9,36 @@ module.exports.login = async (req, res) => {
     const { username, password } = req.body;
     const user = await userDao.getUserByUsername(username);
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) throw "password does not match";
+    if (!isPasswordMatch) {
+      return res
+        .status(401)
+        .json({ success: false, error: "Invalid credentials" });
+    }
 
-    const userData = {
+    const copyUser = {
+      _id: user._id,
       username: user.username,
-      followers: user.following,
-      following: user.following,
+      followers: [...user.followers],
+      following: [...user.following],
     };
 
-    const token = jwt.sign({ id: user._id }, env.jwt_secret);
-    return res.status(200).json({ token, userData });
+    const token = generateToken({ id: copyUser._id });
+    return res.status(200).json({
+      success: true,
+      message: "login successfull",
+      token,
+      user: copyUser,
+    });
   } catch (err) {
-    console.log("asds", err);
+    console.log(err);
     return res.status(500).json({
       success: false,
       error: err,
     });
   }
 };
+
+function generateToken(payload) {
+  const token = jwt.sign(payload, env.jwt_secret);
+  return token;
+}

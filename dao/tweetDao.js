@@ -9,7 +9,12 @@ class TweetDao {
       try {
         const findQuery = {};
         if (userId) findQuery.user = userId;
-        const tweets = await Tweet.find(findQuery);
+        const tweets = await Tweet.find(findQuery)
+          .populate({
+            path: "user",
+            select: "-password",
+          })
+          .sort({ createdAt: -1 });
         resolve(tweets);
       } catch (err) {
         reject(err);
@@ -17,45 +22,18 @@ class TweetDao {
     });
   }
 
-  readFollowerTweets(userId) {
+  readFollowingsTweets(userId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const tweets = await User.aggregate([
-          {
-            $match: {
-              _id: new ObjectId(userId),
-            },
-          },
-          {
-            $lookup: {
-              from: "tweets",
-              let: {
-                followerIds: "$followers",
-              },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $in: ["$user", "$$followerIds"],
-                    },
-                  },
-                },
-                {
-                  $sort: {
-                    createdAt: -1,
-                  },
-                },
-              ],
-              as: "followerTweets",
-            },
-          },
-          {
-            $project: {
-              _id: 0,
-              followerTweets: 1,
-            },
-          },
-        ]);
+        const user = await User.findById({ _id: userId });
+        const tweets = await Tweet.find({
+          user: { $in: user.following },
+        })
+          .populate({
+            path: "user",
+            select: ["-password", "-following", "-followers"],
+          })
+          .sort({ createdAt: -1 });
         resolve(tweets);
       } catch (err) {
         reject(err);
@@ -70,8 +48,11 @@ class TweetDao {
           content: content,
           user: userId,
         });
-        await tweet.save();
-        resolve(tweet);
+        const savedTweet = (await tweet.save()).populate({
+          path: "user",
+          select: "-password",
+        });
+        resolve(savedTweet);
       } catch (err) {
         reject(err);
       }

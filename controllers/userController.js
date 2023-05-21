@@ -18,6 +18,18 @@ class UserController {
         .json({ success: false, error: err || "server error" });
     }
   };
+
+  fetchUserById = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const user = await userDao.getUserById(id);
+      return res.status(200).json({ success: true, data: user });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ success: false, error: err || "server error" });
+    }
+  };
 }
 
 module.exports = UserController;
