@@ -6,6 +6,7 @@ Backend is hosted saperately
 
 
 
+
 ## API Reference
 
 #### URL = https://mini-twitter-m7q8.onrender.com
@@ -13,7 +14,7 @@ Backend is hosted saperately
 #### Create User
 
 ```http
-  POST {{URL}}/api/v1/users/create
+  POST /api/v1/users/create
 ```
 
 | Body (application/json) | Type     | Description                       |
@@ -88,3 +89,25 @@ Backend is hosted saperately
 | `tweetId`| `ObjectId` | **Required**.|
 
 
+#### follow a user
+
+```http
+  POST /api/v1/users/follow/:toFollowId/user/:userId"
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `toFollowId`| `ObjectId` | **Required**.|
+| `userId`| `ObjectId` | **Required**.|
+
+
+#### unfollow a user
+
+```http
+  POST /api/v1/users/unfollow/:toUnFollowId/user/:userId"
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `toUnFollowId`| `ObjectId` | **Required**.|
+| `userId`| `ObjectId` | **Required**.|
