@@ -93,7 +93,7 @@ class UserDao {
   getUserById(userId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const user = await User.findById({ _id: userId }).select("-password");
+        const user = await User.findById(userId).select("-password");
         if (!user) throw "username does not exist";
         resolve(user);
       } catch (err) {

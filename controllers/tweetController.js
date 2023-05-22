@@ -68,6 +68,23 @@ class TweetController {
       });
     }
   };
+
+  destroyTweet = async (req, res) => {
+    try {
+      const { tweetId } = req.params;
+      const deletedTweet = await tweetDao.deleteTweetByTweetId(tweetId);
+      return res.status(200).json({
+        success: true,
+        messege: "tweet updated",
+        data: deletedTweet,
+      });
+    } catch (err) {
+      return res.status(400).json({
+        success: false,
+        error: err,
+      });
+    }
+  };
 }
 
 module.exports = TweetController;

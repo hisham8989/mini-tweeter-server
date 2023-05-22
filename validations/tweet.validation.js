@@ -30,3 +30,9 @@ module.exports.updateTweet = {
     userId: Joi.string().regex(OBJECTID_REGEX).required(),
   }),
 };
+
+module.exports.destroyTweet = {
+  params: Joi.object({
+    tweetId: Joi.string().regex(OBJECTID_REGEX).required(),
+  }),
+};
