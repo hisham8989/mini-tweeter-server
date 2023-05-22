@@ -11,6 +11,12 @@ class UserDao {
         await user.save();
         resolve(user);
       } catch (err) {
+        if (err.code === 11000) {
+          err = {
+            status: 200,
+            message: "user already registered",
+          };
+        }
         reject(err);
       }
     });

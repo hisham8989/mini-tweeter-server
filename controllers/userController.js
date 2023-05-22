@@ -14,8 +14,8 @@ class UserController {
         .json({ success: true, message: "user registered" });
     } catch (err) {
       return res
-        .status(500)
-        .json({ success: false, error: err || "server error" });
+        .status(err?.status || 500)
+        .json({ success: false, error: err.message ?? err ?? "server error" });
     }
   };
 
