@@ -73,6 +73,7 @@ class TweetDao {
       }
     });
   }
+
   updateTweetByUserId(userId, updatedContent) {
     return new Promise(async (resolve, reject) => {
       try {
