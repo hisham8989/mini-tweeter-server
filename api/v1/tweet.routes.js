@@ -35,11 +35,4 @@ router.post(
   controller.updateTweet
 );
 
-router.delete(
-  "/:tweetId",
-  validate(tweetValidation.destroyTweet),
-  authMiddleware.verifyToken,
-  controller.destroyTweet
-);
-
 module.exports = router;

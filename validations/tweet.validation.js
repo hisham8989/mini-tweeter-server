@@ -2,8 +2,8 @@ const { Joi } = require("express-validation");
 const { OBJECTID_REGEX } = require("../constants");
 
 module.exports.getTweet = {
-  query: Joi.object({
-    userId: Joi.string().regex(OBJECTID_REGEX).optional().allow(null, ""),
+  params: Joi.object({
+    userId: Joi.string().regex(OBJECTID_REGEX).optional(),
   }),
 };
 
@@ -28,11 +28,5 @@ module.exports.updateTweet = {
   }),
   params: Joi.object({
     userId: Joi.string().regex(OBJECTID_REGEX).required(),
-  }),
-};
-
-module.exports.destroyTweet = {
-  params: Joi.object({
-    tweetId: Joi.string().regex(OBJECTID_REGEX).required(),
   }),
 };
