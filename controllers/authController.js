@@ -30,10 +30,9 @@ module.exports.login = async (req, res) => {
       user: copyUser,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
+    return res.status(err.status ?? 500).json({
       success: false,
-      error: err,
+      error: err.error?.message ?? err.message ?? "some went wrong",
     });
   }
 };

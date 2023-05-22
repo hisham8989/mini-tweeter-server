@@ -23,7 +23,12 @@ class UserDao {
         if (!user) throw "username does not exist";
         resolve(user);
       } catch (err) {
-        reject(err);
+        reject({
+          error: {
+            message: err,
+            status: 404,
+          },
+        });
       }
     });
   }
